@@ -1,0 +1,463 @@
+/**
+ * 读书笔记列表页面 - JavaScript
+ */
+
+const state = {
+  bookId: null,
+  book: null,
+  editingNoteId: null,
+  deletingNoteId: null
+};
+
+let elements = {};
+
+document.addEventListener('DOMContentLoaded', () => {
+  // 获取 URL 参数
+  const urlParams = new URLSearchParams(window.location.search);
+  state.bookId = urlParams.get('bookId');
+
+  if (!state.bookId) {
+    showToast('未找到书籍信息', 'error');
+    setTimeout(() => {
+      window.location.href = 'books.html';
+    }, 2000);
+    return;
+  }
+
+  cacheElements();
+  bindEvents();
+  loadBook();
+});
+
+function cacheElements() {
+  elements = {
+    // 顶部导航
+    bookTitle: document.getElementById('bookTitle'),
+    bookMeta: document.getElementById('bookMeta'),
+    editBookBtn: document.getElementById('editBookBtn'),
+    deleteBookBtn: document.getElementById('deleteBookBtn'),
+
+    // 书籍信息卡片
+    bookCover: document.getElementById('bookCover'),
+    bookNameDisplay: document.getElementById('bookNameDisplay'),
+    authorDisplay: document.getElementById('authorDisplay'),
+    ratingDisplay: document.getElementById('ratingDisplay'),
+    statusDisplay: document.getElementById('statusDisplay'),
+    dateDisplay: document.getElementById('dateDisplay'),
+    notesCount: document.getElementById('notesCount'),
+
+    // 笔记列表
+    notesList: document.getElementById('notesList'),
+    emptyState: document.getElementById('emptyState'),
+    addNoteBtn: document.getElementById('addNoteBtn'),
+
+    // 添加/编辑笔记弹窗
+    noteModal: document.getElementById('noteModal'),
+    noteModalTitle: document.getElementById('noteModalTitle'),
+    closeNoteModal: document.getElementById('closeNoteModal'),
+    cancelNote: document.getElementById('cancelNote'),
+    noteForm: document.getElementById('noteForm'),
+    noteContent: document.getElementById('noteContent'),
+
+    // 删除笔记弹窗
+    deleteNoteModal: document.getElementById('deleteNoteModal'),
+    closeDeleteNoteModal: document.getElementById('closeDeleteNoteModal'),
+    cancelDeleteNote: document.getElementById('cancelDeleteNote'),
+    confirmDeleteNote: document.getElementById('confirmDeleteNote'),
+
+    // 编辑书籍弹窗
+    editBookModal: document.getElementById('editBookModal'),
+    closeEditBookModal: document.getElementById('closeEditBookModal'),
+    cancelEditBook: document.getElementById('cancelEditBook'),
+    editBookForm: document.getElementById('editBookForm'),
+    editBookName: document.getElementById('editBookName'),
+    editBookAuthor: document.getElementById('editBookAuthor'),
+    editBookRating: document.getElementById('editBookRating'),
+    editReadingStatus: document.getElementById('editReadingStatus'),
+    editStartDate: document.getElementById('editStartDate'),
+    editFinishDate: document.getElementById('editFinishDate'),
+
+    // 删除书籍弹窗
+    deleteBookModal: document.getElementById('deleteBookModal'),
+    closeDeleteBookModal: document.getElementById('closeDeleteBookModal'),
+    cancelDeleteBook: document.getElementById('cancelDeleteBook'),
+    confirmDeleteBook: document.getElementById('confirmDeleteBook'),
+    deleteBookName: document.getElementById('deleteBookName'),
+
+    toast: document.getElementById('toast')
+  };
+}
+
+function bindEvents() {
+  // 笔记相关
+  elements.addNoteBtn?.addEventListener('click', openAddNoteModal);
+  elements.closeNoteModal?.addEventListener('click', closeNoteModal);
+  elements.cancelNote?.addEventListener('click', closeNoteModal);
+  elements.noteModal?.addEventListener('click', (e) => {
+    if (e.target === elements.noteModal) closeNoteModal();
+  });
+  elements.noteForm?.addEventListener('submit', handleNoteSubmit);
+
+  // 删除笔记
+  elements.closeDeleteNoteModal?.addEventListener('click', closeDeleteNoteModal);
+  elements.cancelDeleteNote?.addEventListener('click', closeDeleteNoteModal);
+  elements.deleteNoteModal?.addEventListener('click', (e) => {
+    if (e.target === elements.deleteNoteModal) closeDeleteNoteModal();
+  });
+  elements.confirmDeleteNote?.addEventListener('click', confirmDeleteNote);
+
+  // 编辑书籍
+  elements.editBookBtn?.addEventListener('click', openEditBookModal);
+  elements.closeEditBookModal?.addEventListener('click', closeEditBookModal);
+  elements.cancelEditBook?.addEventListener('click', closeEditBookModal);
+  elements.editBookModal?.addEventListener('click', (e) => {
+    if (e.target === elements.editBookModal) closeEditBookModal();
+  });
+  elements.editBookForm?.addEventListener('submit', handleEditBookSubmit);
+
+  // 删除书籍
+  elements.deleteBookBtn?.addEventListener('click', openDeleteBookModal);
+  elements.closeDeleteBookModal?.addEventListener('click', closeDeleteBookModal);
+  elements.cancelDeleteBook?.addEventListener('click', closeDeleteBookModal);
+  elements.deleteBookModal?.addEventListener('click', (e) => {
+    if (e.target === elements.deleteBookModal) closeDeleteBookModal();
+  });
+  elements.confirmDeleteBook?.addEventListener('click', confirmDeleteBook);
+}
+
+// ========== 加载数据 ==========
+
+function loadBook() {
+  const books = StorageManager.getBooks();
+  state.book = books.find(b => b.id === state.bookId);
+
+  if (!state.book) {
+    showToast('书籍不存在', 'error');
+    setTimeout(() => {
+      window.location.href = 'books.html';
+    }, 2000);
+    return;
+  }
+
+  // 确保笔记数组存在
+  if (!state.book.notes) {
+    state.book.notes = [];
+  }
+
+  renderBookInfo();
+  renderNotes();
+}
+
+// ========== 渲染书籍信息 ==========
+
+function renderBookInfo() {
+  const book = state.book;
+  const stars = '⭐'.repeat(book.rating || 4);
+  const statusEmoji = book.readingStatus === '已读' ? '✅' : '📖';
+
+  // 顶部导航
+  elements.bookTitle.textContent = book.bookName;
+  elements.bookMeta.textContent = `${book.author || '未知作者'} · ${stars}`;
+
+  // 书籍信息卡片
+  if (book.cover) {
+    elements.bookCover.innerHTML = `<img src="${book.cover}" alt="${book.bookName}">`;
+  } else {
+    elements.bookCover.innerHTML = '📚';
+  }
+
+  elements.bookNameDisplay.textContent = book.bookName;
+  elements.authorDisplay.textContent = book.author || '未知作者';
+  elements.ratingDisplay.textContent = stars;
+  elements.statusDisplay.textContent = `${statusEmoji} ${book.readingStatus || '在读'}`;
+
+  // 日期显示
+  let dateText = '';
+  if (book.startDate) {
+    dateText = book.finishDate
+      ? `${formatDate(book.startDate)} - ${formatDate(book.finishDate)}`
+      : `开始于 ${formatDate(book.startDate)}`;
+  } else {
+    dateText = '未设置阅读时间';
+  }
+  elements.dateDisplay.textContent = dateText;
+
+  // 笔记数量
+  elements.notesCount.textContent = `${book.notes.length} 条笔记`;
+}
+
+// ========== 渲染笔记列表 ==========
+
+function renderNotes() {
+  const notes = state.book.notes || [];
+
+  if (notes.length === 0) {
+    elements.notesList.style.display = 'none';
+    elements.emptyState.hidden = false;
+    return;
+  }
+
+  elements.notesList.style.display = 'flex';
+  elements.emptyState.hidden = true;
+
+  // 按时间倒序排列
+  const sortedNotes = [...notes].sort((a, b) => {
+    return new Date(b.createTime) - new Date(a.createTime);
+  });
+
+  elements.notesList.innerHTML = sortedNotes.map(note => createNoteItem(note)).join('');
+
+  // 绑定笔记事件
+  bindNoteEvents();
+}
+
+function createNoteItem(note) {
+  const preview = getContentPreview(note.content, 150);
+  const timeStr = formatDateTime(note.createTime);
+
+  return `
+    <div class="note-item" data-note-id="${note.id}">
+      <div class="note-item__header">
+        <span class="note-item__time">
+          <i class="fas fa-clock"></i>
+          ${timeStr}
+        </span>
+        <div class="note-item__actions">
+          <button class="note-item__action-btn note-item__action-btn--edit" data-action="edit" title="编辑">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="note-item__action-btn note-item__action-btn--delete" data-action="delete" title="删除">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+      <div class="note-item__content">${escapeHtml(preview)}</div>
+      <div class="note-item__read-more">
+        查看详情 <i class="fas fa-arrow-right"></i>
+      </div>
+    </div>
+  `;
+}
+
+function bindNoteEvents() {
+  document.querySelectorAll('.note-item').forEach(item => {
+    const noteId = item.dataset.noteId;
+    const editBtn = item.querySelector('[data-action="edit"]');
+    const deleteBtn = item.querySelector('[data-action="delete"]');
+
+    // 点击笔记项进入详情页
+    item.addEventListener('click', (e) => {
+      if (e.target.closest('[data-action]')) return;
+      window.location.href = `note-detail.html?bookId=${state.bookId}&noteId=${noteId}`;
+    });
+
+    // 编辑
+    editBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openEditNoteModal(noteId);
+    });
+
+    // 删除
+    deleteBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openDeleteNoteModal(noteId);
+    });
+  });
+}
+
+// ========== 添加/编辑笔记 ==========
+
+function openAddNoteModal() {
+  state.editingNoteId = null;
+  elements.noteModalTitle.textContent = '添加笔记';
+  elements.noteContent.value = '';
+  elements.noteModal.setAttribute('aria-hidden', 'false');
+  elements.noteContent.focus();
+}
+
+function openEditNoteModal(noteId) {
+  state.editingNoteId = noteId;
+  const note = state.book.notes.find(n => n.id === noteId);
+  if (!note) return;
+
+  elements.noteModalTitle.textContent = '编辑笔记';
+  elements.noteContent.value = note.content || '';
+  elements.noteModal.setAttribute('aria-hidden', 'false');
+  elements.noteContent.focus();
+}
+
+function closeNoteModal() {
+  elements.noteModal.setAttribute('aria-hidden', 'true');
+  elements.noteContent.value = '';
+  state.editingNoteId = null;
+}
+
+function handleNoteSubmit(e) {
+  e.preventDefault();
+
+  const content = elements.noteContent.value.trim();
+  if (!content) {
+    showToast('请输入笔记内容', 'error');
+    return;
+  }
+
+  if (state.editingNoteId) {
+    // 编辑模式
+    const noteIndex = state.book.notes.findIndex(n => n.id === state.editingNoteId);
+    if (noteIndex !== -1) {
+      state.book.notes[noteIndex].content = content;
+      state.book.notes[noteIndex].updateTime = new Date().toISOString();
+    }
+  } else {
+    // 添加模式
+    const newNote = {
+      id: StorageManager.generateId(),
+      content: content,
+      createTime: new Date().toISOString()
+    };
+    state.book.notes.unshift(newNote); // 添加到开头
+  }
+
+  // 保存到 localStorage
+  if (StorageManager.updateBook(state.bookId, state.book)) {
+    showToast(state.editingNoteId ? '笔记更新成功' : '笔记添加成功');
+    renderNotes();
+    renderBookInfo(); // 更新笔记数量
+    closeNoteModal();
+  } else {
+    showToast('保存失败，请重试', 'error');
+  }
+}
+
+// ========== 删除笔记 ==========
+
+function openDeleteNoteModal(noteId) {
+  state.deletingNoteId = noteId;
+  elements.deleteNoteModal.setAttribute('aria-hidden', 'false');
+}
+
+function closeDeleteNoteModal() {
+  elements.deleteNoteModal.setAttribute('aria-hidden', 'true');
+  state.deletingNoteId = null;
+}
+
+function confirmDeleteNote() {
+  if (!state.deletingNoteId) return;
+
+  state.book.notes = state.book.notes.filter(n => n.id !== state.deletingNoteId);
+
+  if (StorageManager.updateBook(state.bookId, state.book)) {
+    showToast('笔记已删除');
+    renderNotes();
+    renderBookInfo();
+    closeDeleteNoteModal();
+  } else {
+    showToast('删除失败，请重试', 'error');
+  }
+}
+
+// ========== 编辑书籍 ==========
+
+function openEditBookModal() {
+  const book = state.book;
+  elements.editBookName.value = book.bookName || '';
+  elements.editBookAuthor.value = book.author || '';
+  elements.editBookRating.value = book.rating || 4;
+  elements.editReadingStatus.value = book.readingStatus || '在读';
+  elements.editStartDate.value = book.startDate || '';
+  elements.editFinishDate.value = book.finishDate || '';
+  elements.editBookModal.setAttribute('aria-hidden', 'false');
+}
+
+function closeEditBookModal() {
+  elements.editBookModal.setAttribute('aria-hidden', 'true');
+}
+
+function handleEditBookSubmit(e) {
+  e.preventDefault();
+
+  const bookData = {
+    bookName: elements.editBookName.value.trim(),
+    author: elements.editBookAuthor.value.trim(),
+    rating: parseInt(elements.editBookRating.value),
+    readingStatus: elements.editReadingStatus.value,
+    startDate: elements.editStartDate.value,
+    finishDate: elements.editFinishDate.value
+  };
+
+  if (!bookData.bookName) {
+    showToast('请输入书名', 'error');
+    return;
+  }
+
+  if (StorageManager.updateBook(state.bookId, bookData)) {
+    showToast('书籍信息已更新');
+    loadBook();
+    closeEditBookModal();
+  } else {
+    showToast('更新失败，请重试', 'error');
+  }
+}
+
+// ========== 删除书籍 ==========
+
+function openDeleteBookModal() {
+  elements.deleteBookName.textContent = `《${state.book.bookName}》`;
+  elements.deleteBookModal.setAttribute('aria-hidden', 'false');
+}
+
+function closeDeleteBookModal() {
+  elements.deleteBookModal.setAttribute('aria-hidden', 'true');
+}
+
+function confirmDeleteBook() {
+  if (StorageManager.deleteBook(state.bookId)) {
+    showToast('书籍已删除');
+    setTimeout(() => {
+      window.location.href = 'books.html';
+    }, 1000);
+  } else {
+    showToast('删除失败，请重试', 'error');
+  }
+}
+
+// ========== 工具函数 ==========
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  return `${date.getFullYear()}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getDate().toString().padStart(2, '0')}`;
+}
+
+function formatDateTime(dateStr) {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+
+function getContentPreview(content, maxLength) {
+  if (!content) return '';
+  if (content.length <= maxLength) return content;
+  return content.substring(0, maxLength) + '...';
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function showToast(message, type = 'success') {
+  elements.toast.textContent = message;
+  elements.toast.className = `toast ${type}`;
+  elements.toast.classList.add('show');
+
+  setTimeout(() => {
+    elements.toast.classList.remove('show');
+  }, 3000);
+}

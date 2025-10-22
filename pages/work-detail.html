@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="作品详情 - 个人成长网站">
+  <title>作品详情 - 个人成长网站</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/pages/work-detail.css">
+</head>
+<body>
+  <!-- 顶部导航 -->
+  <nav class="detail-hero">
+    <div class="detail-hero__container">
+      <div class="detail-hero__left">
+        <button class="back-btn" id="backBtn">
+          <i class="fas fa-arrow-left"></i>
+          <span>返回</span>
+        </button>
+        <h1 id="workTitle">作品详情</h1>
+      </div>
+      <div class="detail-hero__actions">
+        <button class="hero-btn" id="editBtn" title="编辑">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="hero-btn hero-btn--danger" id="deleteBtn" title="删除">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <main class="main-content">
+    <div class="work-detail-container">
+      <!-- 作品大图 -->
+      <div class="work-image-wrapper">
+        <img id="workImage" src="" alt="作品图片" class="work-image">
+      </div>
+
+      <!-- 作品信息 -->
+      <div class="work-info-card">
+        <div class="info-row">
+          <div class="info-item">
+            <i class="fas fa-calendar-alt info-icon"></i>
+            <div class="info-text">
+              <span class="info-label">创作时间</span>
+              <span class="info-value" id="createDate">-</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="description-section">
+          <h2>作品描述</h2>
+          <div id="description" class="description-content">
+            <p class="empty-hint">暂无描述</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 删除确认弹窗 -->
+  <div id="deleteModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal delete-modal">
+      <div class="modal-header">
+        <h3>确认删除</h3>
+        <button class="modal-close" id="closeDeleteModal" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <p>确定要删除这个作品吗？此操作无法撤销。</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" type="button" id="cancelDelete">取消</button>
+        <button class="btn btn-danger" type="button" id="confirmDelete">
+          <i class="fas fa-trash"></i>
+          <span>确认删除</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="../js/storage.js"></script>
+  <script src="../js/pages/work-detail.js"></script>
+</body>
+</html>

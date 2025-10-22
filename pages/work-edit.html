@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="编辑作品 - 个人成长网站">
+  <title>编辑作品 - 个人成长网站</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/pages/work-form.css">
+</head>
+<body>
+  <!-- 顶部导航 -->
+  <nav class="form-hero">
+    <div class="form-hero__container">
+      <button class="back-btn" id="backBtn">
+        <i class="fas fa-arrow-left"></i>
+        <span>返回</span>
+      </button>
+      <h1>编辑作品</h1>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <main class="main-content">
+    <div class="form-container">
+      <form id="workForm" class="work-form">
+        <!-- 作品名称 -->
+        <div class="form-group">
+          <label for="workTitle" class="form-label required">作品名称</label>
+          <input
+            type="text"
+            id="workTitle"
+            name="title"
+            class="form-input"
+            placeholder="给你的作品起个名字..."
+            required
+          >
+        </div>
+
+        <!-- 作品图片 -->
+        <div class="form-group">
+          <label class="form-label">作品图片</label>
+          <div class="image-upload-area" id="imageUploadArea">
+            <div class="image-preview" id="imagePreview">
+              <img id="previewImg" src="" alt="作品预览" hidden>
+              <div class="upload-placeholder" id="uploadPlaceholder">
+                <i class="fas fa-image"></i>
+                <p>点击选择图片或使用占位图</p>
+              </div>
+            </div>
+            <div class="image-actions">
+              <button type="button" class="btn btn-outline btn-sm" id="selectImageBtn">
+                <i class="fas fa-upload"></i>
+                <span>选择图片</span>
+              </button>
+              <button type="button" class="btn btn-outline btn-sm" id="usePlaceholderBtn">
+                <i class="fas fa-image"></i>
+                <span>使用占位图</span>
+              </button>
+              <button type="button" class="btn btn-outline btn-sm" id="removeImageBtn" hidden>
+                <i class="fas fa-trash"></i>
+                <span>移除</span>
+              </button>
+            </div>
+          </div>
+          <input type="file" id="imageInput" accept="image/*" hidden>
+        </div>
+
+        <!-- 创作时间 -->
+        <div class="form-group">
+          <label for="createDate" class="form-label required">创作时间</label>
+          <input
+            type="date"
+            id="createDate"
+            name="createDate"
+            class="form-input"
+            required
+          >
+        </div>
+
+        <!-- 作品描述 -->
+        <div class="form-group">
+          <label for="description" class="form-label">作品描述</label>
+          <textarea
+            id="description"
+            name="description"
+            class="form-textarea"
+            rows="6"
+            placeholder="描述一下这个作品的创作背景、灵感来源或创作心得..."
+          ></textarea>
+          <div class="form-hint">选填</div>
+        </div>
+
+        <!-- 表单按钮 -->
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline btn-lg" id="cancelBtn">
+            取消
+          </button>
+          <button type="submit" class="btn btn-primary btn-lg">
+            <i class="fas fa-save"></i>
+            <span>保存修改</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="../js/storage.js"></script>
+  <script src="../js/pages/work-edit.js"></script>
+</body>
+</html>

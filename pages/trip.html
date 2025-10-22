@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="旅程 - 我的足迹">
+  <title>旅程 - 个人成长网站</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/pages/trip.css">
+</head>
+<body>
+  <!-- 顶部导航栏 -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="../nav.html" class="navbar-logo">
+        <span class="logo-icon">✨</span>
+        <span class="logo-text">个人成长</span>
+      </a>
+      <h1 class="navbar-title">旅程</h1>
+      <div class="navbar-actions">
+        <button class="nav-btn" id="backBtn" onclick="goBack()" title="返回">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <main class="main-content">
+    <!-- 旅程容器 -->
+    <div class="trip-container">
+      <!-- 地图和列表容器 -->
+      <div class="trip-content">
+        <!-- 左侧：地图容器 -->
+        <div class="map-wrapper">
+          <div id="mapContainer" class="map-container" style="width: 100%; height: 100%;"></div>
+        </div>
+
+        <!-- 右侧：省份列表 -->
+        <div class="trip-list-wrapper">
+          <div class="trip-list-header">
+            <h3>旅程列表</h3>
+            <span class="trip-count" id="tripCount">(0)</span>
+          </div>
+          <div class="trip-list" id="tripList">
+            <!-- 动态生成的旅程列表 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 新增按钮 -->
+      <button class="btn btn-primary btn-add-trip" onclick="openAddTripModal()">
+        <i class="fas fa-plus"></i> 新增旅程
+      </button>
+    </div>
+  </main>
+
+  <!-- 新增旅程模态框 -->
+  <div id="addTripModal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>新增旅程</h3>
+        <button class="modal-close" onclick="closeAddTripModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="tripForm">
+          <!-- 省份选择 -->
+          <div class="form-group">
+            <label for="provinceSelect">选择省份 <span class="required">*</span></label>
+            <select id="provinceSelect" class="form-control" required>
+              <option value="">-- 请选择 --</option>
+            </select>
+          </div>
+
+          <!-- 旅行时间 -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="startDate">开始日期 <span class="required">*</span></label>
+              <input type="date" id="startDate" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="endDate">结束日期 <span class="required">*</span></label>
+              <input type="date" id="endDate" class="form-control" required>
+            </div>
+          </div>
+
+          <!-- 同行人 -->
+          <div class="form-group">
+            <label for="tripCompanions">同行人</label>
+            <input type="text" id="tripCompanions" class="form-control" placeholder="例如：朋友A、B、C 或 家人">
+          </div>
+
+          <!-- 旅程描述 -->
+          <div class="form-group">
+            <label for="tripDescription">旅程描述</label>
+            <textarea id="tripDescription" class="form-control" placeholder="记录这次旅程的美好回忆..." rows="4"></textarea>
+          </div>
+
+          <!-- 喜欢程度评分 -->
+          <div class="form-group">
+            <label for="tripRating">喜欢程度 <span class="required">*</span></label>
+            <div class="rating-input">
+              <input type="range" id="tripRating" min="1" max="5" value="3" class="form-control" style="cursor: pointer;">
+              <span id="ratingDisplay" style="margin-left: 10px; font-weight: bold;">★★★☆☆ (3/5)</span>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeAddTripModal()">取消</button>
+        <button class="btn btn-primary" onclick="saveTrip()">确认</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <!-- 中国地图完整数据 - 使用国内可访问的 CDN -->
+  <script>
+    // 使用高德地图或其他国内 CDN 源
+    const mapSources = [
+      'https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json',  // 阿里云DataV
+      'https://unpkg.com/echarts@5.4.3/map/json/china.json',           // unpkg CDN
+      'https://fastly.jsdelivr.net/npm/echarts@5.4.3/map/json/china.json'  // fastly CDN
+    ];
+
+    function loadMapData(sources, index = 0) {
+      if (index >= sources.length) {
+        console.error('❌ 无法从任何源加载地图数据');
+        alert('地图数据加载失败，请检查网络连接');
+        return;
+      }
+
+      console.log(`正在尝试加载地图数据源 ${index + 1}/${sources.length}...`);
+
+      fetch(sources[index])
+        .then(r => {
+          if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
+          return r.json();
+        })
+        .then(data => {
+          echarts.registerMap('china', data);
+          console.log('✓ 中国地图已从源 ' + (index + 1) + ' 加载成功');
+          // 触发地图初始化
+          if (window.initChartWhenMapReady) {
+            window.initChartWhenMapReady();
+          }
+        })
+        .catch(err => {
+          console.warn(`⚠️ 源 ${index + 1} 加载失败: ${err.message}`);
+          loadMapData(sources, index + 1);
+        });
+    }
+
+    // 延迟加载，确保 echarts 已准备好
+    setTimeout(() => {
+      loadMapData(mapSources);
+    }, 200);
+  </script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/pages/trip.js"></script>
+</body>
+</html>

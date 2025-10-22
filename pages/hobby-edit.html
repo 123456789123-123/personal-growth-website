@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="编辑兴趣爱好 - 个人成长网站">
+  <title>编辑兴趣爱好 - 个人成长网站</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/pages/hobby-form.css">
+</head>
+<body>
+  <!-- 顶部导航 -->
+  <nav class="form-hero">
+    <div class="form-hero__container">
+      <button class="back-btn" id="backBtn">
+        <i class="fas fa-arrow-left"></i>
+        <span>返回</span>
+      </button>
+      <h1>编辑兴趣爱好</h1>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <main class="main-content">
+    <div class="form-container">
+      <form id="hobbyForm" class="hobby-form">
+        <!-- 兴趣名称 -->
+        <div class="form-group">
+          <label for="hobbyName" class="form-label required">兴趣名称</label>
+          <input
+            type="text"
+            id="hobbyName"
+            name="name"
+            class="form-input"
+            placeholder="例如：摄影、绘画、编程..."
+            required
+          >
+        </div>
+
+        <!-- 封面图片 -->
+        <div class="form-group">
+          <label class="form-label">封面图片</label>
+          <div class="image-upload-area" id="imageUploadArea">
+            <div class="image-preview" id="imagePreview">
+              <img id="previewImg" src="" alt="封面预览" hidden>
+              <div class="upload-placeholder" id="uploadPlaceholder">
+                <i class="fas fa-image"></i>
+                <p>点击选择图片或使用占位图</p>
+              </div>
+            </div>
+            <div class="image-actions">
+              <button type="button" class="btn btn-outline btn-sm" id="selectImageBtn">
+                <i class="fas fa-upload"></i>
+                <span>选择图片</span>
+              </button>
+              <button type="button" class="btn btn-outline btn-sm" id="usePlaceholderBtn">
+                <i class="fas fa-image"></i>
+                <span>使用占位图</span>
+              </button>
+              <button type="button" class="btn btn-outline btn-sm" id="removeImageBtn" hidden>
+                <i class="fas fa-trash"></i>
+                <span>移除</span>
+              </button>
+            </div>
+          </div>
+          <input type="file" id="imageInput" accept="image/*" hidden>
+        </div>
+
+        <!-- 简短描述 -->
+        <div class="form-group">
+          <label for="shortDesc" class="form-label">简短描述</label>
+          <textarea
+            id="shortDesc"
+            name="shortDesc"
+            class="form-textarea"
+            rows="2"
+            placeholder="一句话介绍这个兴趣爱好..."
+            maxlength="100"
+          ></textarea>
+          <div class="form-hint">选填，最多100字</div>
+        </div>
+
+        <!-- 开始时间 -->
+        <div class="form-group">
+          <label for="startDate" class="form-label required">开始时间</label>
+          <input
+            type="date"
+            id="startDate"
+            name="startDate"
+            class="form-input"
+            required
+          >
+        </div>
+
+        <!-- 详细介绍 -->
+        <div class="form-group">
+          <label for="detailContent" class="form-label">详细介绍</label>
+          <textarea
+            id="detailContent"
+            name="detailContent"
+            class="form-textarea"
+            rows="8"
+            placeholder="详细介绍你的这个兴趣爱好，包括如何开始的、有什么感悟等..."
+          ></textarea>
+          <div class="form-hint">选填，支持长文</div>
+        </div>
+
+        <!-- 表单按钮 -->
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline btn-lg" id="cancelBtn">
+            取消
+          </button>
+          <button type="submit" class="btn btn-primary btn-lg">
+            <i class="fas fa-save"></i>
+            <span>保存修改</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="../js/storage.js"></script>
+  <script src="../js/pages/hobby-edit.js"></script>
+</body>
+</html>

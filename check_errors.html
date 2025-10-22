@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>相册错误检查</title>
+  <style>
+    body { font-family: monospace; padding: 20px; }
+    .success { color: green; }
+    .error { color: red; }
+    .warning { color: orange; }
+  </style>
+</head>
+<body>
+  <h1>相册页面错误检查</h1>
+  <div id="results"></div>
+  
+  <script>
+    const results = document.getElementById('results');
+    
+    function log(message, type = 'info') {
+      const div = document.createElement('div');
+      div.className = type;
+      div.textContent = message;
+      results.appendChild(div);
+    }
+    
+    // 检查 1: CSS 文件
+    log('检查 1: CSS 文件加载', 'info');
+    fetch('../css/global.css')
+      .then(() => log('✓ global.css 加载成功', 'success'))
+      .catch(() => log('✗ global.css 加载失败', 'error'));
+    
+    fetch('../css/pages/album.css')
+      .then(() => log('✓ album.css 加载成功', 'success'))
+      .catch(() => log('✗ album.css 加载失败', 'error'));
+    
+    // 检查 2: JS 文件
+    log('\n检查 2: JavaScript 文件', 'info');
+    fetch('../js/storage.js')
+      .then(() => log('✓ storage.js 存在', 'success'))
+      .catch(() => log('✗ storage.js 不存在', 'error'));
+    
+    fetch('../js/pages/album.js')
+      .then(() => log('✓ album.js 存在', 'success'))
+      .catch(() => log('✗ album.js 不存在', 'error'));
+    
+    // 检查 3: StorageManager
+    setTimeout(() => {
+      log('\n检查 3: StorageManager 对象', 'info');
+      if (typeof StorageManager !== 'undefined') {
+        log('✓ StorageManager 已定义', 'success');
+        log('  - getPhotos: ' + (typeof StorageManager.getPhotos === 'function' ? '✓' : '✗'));
+        log('  - addPhoto: ' + (typeof StorageManager.addPhoto === 'function' ? '✓' : '✗'));
+        log('  - updatePhoto: ' + (typeof StorageManager.updatePhoto === 'function' ? '✓' : '✗'));
+      } else {
+        log('✗ StorageManager 未定义', 'error');
+      }
+    }, 1000);
+    
+    // 监听所有错误
+    window.addEventListener('error', (e) => {
+      log('✗ 错误: ' + e.message, 'error');
+      log('  文件: ' + e.filename, 'error');
+      log('  行号: ' + e.lineno + ':' + e.colno, 'error');
+    });
+    
+    console.log('错误检查页面已加载');
+  </script>
+  
+  <script src="../js/storage.js"></script>
+  <script src="../js/pages/album.js"></script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="相册 - 个人成长网站">
+  <title>相册 - 个人成长网站</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/pages/album.css">
+</head>
+<body>
+  <!-- 顶部导航 -->
+  <nav class="album-hero">
+    <div class="album-hero__container">
+      <div class="album-hero__content">
+        <div class="album-hero__icon">✨</div>
+        <div class="album-hero__title-group">
+          <h1>相册</h1>
+          <p>收集值得珍藏的瞬间</p>
+        </div>
+      </div>
+      <div class="album-hero__actions">
+        <button class="hero-btn" id="refreshAlbum" title="刷新">
+          <i class="fas fa-rotate"></i>
+        </button>
+        <a href="../nav.html" class="hero-btn hero-btn--ghost" title="返回导航">
+          <i class="fas fa-arrow-left"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <main class="main-content">
+    <section class="filters-section">
+      <div class="filters-toolbar">
+        <div class="view-switch" role="tablist" aria-label="相册视图切换">
+          <button class="view-btn active" data-view="all" role="tab" aria-selected="true">全部照片</button>
+          <button class="view-btn" data-view="liked" role="tab" aria-selected="false">已点赞</button>
+        </div>
+
+        <button class="upload-btn" id="openUploadModal">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <span>上传照片</span>
+        </button>
+
+        <div class="stats" id="albumStats">
+          <span id="totalCount">0 张照片</span>
+          <span class="divider">|</span>
+          <span id="likedCount">0 张已点赞</span>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-header">
+          <h2>分类</h2>
+          <button class="clear-link" id="clearCategory">重置</button>
+        </div>
+        <div class="chip-group" id="categoryChips" role="listbox" aria-label="按分类筛选"></div>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-header">
+          <h2>标签</h2>
+          <button class="clear-link" id="clearTags">清空标签</button>
+        </div>
+        <div class="chip-group" id="tagChips" role="listbox" aria-label="按标签筛选"></div>
+      </div>
+    </section>
+
+    <section class="gallery-section">
+      <div id="galleryGrid" class="gallery-grid" aria-live="polite"></div>
+      <div id="emptyState" class="empty-state" hidden>
+        <i class="fas fa-images"></i>
+        <h3>没有符合条件的照片</h3>
+        <p>尝试更换分类或标签，或者上传一些新的照片。</p>
+      </div>
+      <div id="loadingMore" class="loading-indicator" hidden>
+        <span class="spinner"></span>
+        <span>加载更多照片...</span>
+      </div>
+      <div id="sentinel" class="sentinel" aria-hidden="true"></div>
+    </section>
+  </main>
+
+  <!-- 上传照片弹窗 -->
+  <div id="uploadModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal album-modal">
+      <div class="modal-header">
+        <h3>上传照片</h3>
+        <button class="modal-close" id="closeUploadModal" aria-label="关闭">×</button>
+      </div>
+      <form id="uploadForm" class="modal-body" novalidate>
+        <div class="form-grid">
+          <label class="form-field form-field--full" for="photoFile">
+            <span>照片文件<span class="required">*</span></span>
+            <input type="file" id="photoFile" accept="image/*" required>
+          </label>
+
+          <label class="form-field" for="photoTitle">
+            <span>标题</span>
+            <input type="text" id="photoTitle" maxlength="40" placeholder="给照片取个名字吧">
+          </label>
+
+          <label class="form-field" for="photoCategory">
+            <span>分类</span>
+            <input list="categoryOptions" type="text" id="photoCategory" placeholder="例如 旅行 / 美食 / 日常">
+            <datalist id="categoryOptions"></datalist>
+          </label>
+
+          <label class="form-field" for="photoTags">
+            <span>标签</span>
+            <input type="text" id="photoTags" placeholder="多个标签用逗号分隔，例如 海边, 日落">
+          </label>
+        </div>
+
+        <label class="form-field form-field--full" for="photoDescription">
+          <span>描述</span>
+          <textarea id="photoDescription" rows="3" placeholder="记录下这张照片背后的故事"></textarea>
+        </label>
+      </form>
+      <div class="modal-footer">
+        <button class="btn btn-outline" type="button" id="cancelUpload">取消</button>
+        <button class="btn btn-primary" type="submit" form="uploadForm">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <span>保存照片</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 编辑照片弹窗 -->
+  <div id="editModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal album-modal">
+      <div class="modal-header">
+        <h3>编辑照片信息</h3>
+        <button class="modal-close" id="closeEditModal" aria-label="关闭">×</button>
+      </div>
+      <form id="editForm" class="modal-body" novalidate>
+        <div class="form-grid">
+          <label class="form-field" for="editPhotoTitle">
+            <span>标题</span>
+            <input type="text" id="editPhotoTitle" maxlength="40" placeholder="给照片取个名字吧">
+          </label>
+
+          <label class="form-field" for="editPhotoCategory">
+            <span>分类</span>
+            <input list="editCategoryOptions" type="text" id="editPhotoCategory" placeholder="例如 旅行 / 美食 / 日常">
+            <datalist id="editCategoryOptions"></datalist>
+          </label>
+
+          <label class="form-field form-field--full" for="editPhotoTags">
+            <span>标签</span>
+            <input type="text" id="editPhotoTags" placeholder="多个标签用逗号分隔，例如 海边, 日落">
+          </label>
+        </div>
+
+        <label class="form-field form-field--full" for="editPhotoDescription">
+          <span>描述</span>
+          <textarea id="editPhotoDescription" rows="3" placeholder="记录下这张照片背后的故事"></textarea>
+        </label>
+      </form>
+      <div class="modal-footer">
+        <button class="btn btn-outline" type="button" id="cancelEdit">取消</button>
+        <button class="btn btn-primary" type="submit" form="editForm">
+          <i class="fas fa-save"></i>
+          <span>保存修改</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 大图预览 -->
+  <div id="lightbox" class="lightbox" aria-hidden="true">
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="closeLightbox" aria-label="关闭预览">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="lightbox-image-wrapper">
+        <img id="lightboxImage" src="" alt="">
+      </div>
+      <div class="lightbox-info">
+        <div class="lightbox-header">
+          <div>
+            <h3 id="lightboxTitle">--</h3>
+            <p id="lightboxMeta" class="lightbox-meta"></p>
+          </div>
+          <div class="lightbox-actions">
+            <button id="lightboxEdit" class="icon-btn" aria-label="编辑">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button id="lightboxLike" class="icon-btn" aria-label="点赞">
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+        </div>
+        <p id="lightboxDescription" class="lightbox-description"></p>
+        <div id="lightboxTags" class="lightbox-tags"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="../js/storage.js"></script>
+  <script src="../js/pages/album.js"></script>
+</body>
+</html>

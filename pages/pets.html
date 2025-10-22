@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="宠物 - 记录宠物成长">
+  <title>宠物 - 个人成长网站</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/global.css?v=2.0">
+  <link rel="stylesheet" href="../css/pages/pets.css?v=2.0">
+</head>
+<body>
+  <!-- 顶部导航 -->
+  <nav class="pets-hero">
+    <div class="pets-hero__container">
+      <div class="pets-hero__content">
+        <div class="pets-hero__icon">🐾</div>
+        <div class="pets-hero__title-group">
+          <h1>宠物</h1>
+          <p>记录宠物成长的每一刻</p>
+        </div>
+      </div>
+      <div class="pets-hero__actions">
+        <button class="hero-btn" id="exportBtn" onclick="exportPetData()" title="导出数据">
+          <i class="fas fa-download"></i>
+        </button>
+        <button class="hero-btn" id="importBtn" onclick="importPetData()" title="导入数据">
+          <i class="fas fa-upload"></i>
+        </button>
+        <a href="../nav.html" class="hero-btn hero-btn--ghost" title="返回导航">
+          <i class="fas fa-arrow-left"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <main class="main-content">
+    <!-- Tab 导航 -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" data-tab="profile">
+        <i class="fas fa-id-card"></i> 档案
+      </button>
+      <button class="tab-btn" data-tab="growth">
+        <i class="fas fa-chart-line"></i> 成长记录
+      </button>
+      <button class="tab-btn" data-tab="photos">
+        <i class="fas fa-images"></i> 照片合集
+      </button>
+      <button class="tab-btn" data-tab="diary">
+        <i class="fas fa-book"></i> 日常点滴
+      </button>
+    </div>
+
+    <!-- Tab 内容区 -->
+    <div class="tabs-content">
+      <!-- 档案 Tab -->
+      <div class="tab-pane active" id="profile-tab">
+        <!-- 基本信息卡片 -->
+        <div class="profile-card">
+          <div class="profile-header">
+            <h2>基本信息</h2>
+            <button class="btn btn-sm btn-outline" onclick="editProfile()">
+              <i class="fas fa-edit"></i> 编辑
+            </button>
+          </div>
+          <div class="profile-content" id="profileContent">
+            <!-- 动态生成 -->
+          </div>
+        </div>
+
+        <!-- 体重折线图 -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h2>体重变化趋势</h2>
+            <button class="btn btn-sm btn-outline" onclick="addWeightRecord()">
+              <i class="fas fa-plus"></i> 添加记录
+            </button>
+          </div>
+          <div id="weightChart" style="width: 100%; height: 400px;"></div>
+        </div>
+
+        <!-- 性格标签 -->
+        <div class="tags-card">
+          <div class="tags-header">
+            <h2>性格标签</h2>
+            <button class="btn btn-sm btn-outline" onclick="editTags()">
+              <i class="fas fa-edit"></i> 编辑
+            </button>
+          </div>
+          <div class="tags-content" id="tagsContent">
+            <!-- 动态生成 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 成长记录 Tab -->
+      <div class="tab-pane" id="growth-tab">
+        <div class="growth-header">
+          <h2>成长时间轴</h2>
+          <button class="btn btn-primary" onclick="addGrowthRecord()">
+            <i class="fas fa-plus"></i> 添加记录
+          </button>
+        </div>
+        <div class="timeline-container" id="timelineContainer">
+          <!-- 动态生成时间轴 -->
+        </div>
+      </div>
+
+      <!-- 照片合集 Tab -->
+      <div class="tab-pane" id="photos-tab">
+        <div class="photos-header">
+          <div class="photos-filter">
+            <select id="yearFilter" class="filter-select">
+              <option value="">全部年份</option>
+            </select>
+            <select id="monthFilter" class="filter-select">
+              <option value="">全部月份</option>
+            </select>
+          </div>
+          <div class="photos-actions">
+            <button class="btn btn-outline btn-sm" onclick="startSlideshow()">
+              <i class="fas fa-play"></i> 幻灯片
+            </button>
+            <button class="btn btn-primary" onclick="addPhoto()">
+              <i class="fas fa-plus"></i> 添加照片
+            </button>
+          </div>
+        </div>
+        <div class="waterfall-container" id="photosContainer">
+          <!-- 动态生成瀑布流 -->
+        </div>
+      </div>
+
+      <!-- 日常点滴 Tab -->
+      <div class="tab-pane" id="diary-tab">
+        <div class="diary-header">
+          <div class="diary-search">
+            <input type="text" id="diarySearch" class="search-input" placeholder="搜索日记...">
+            <button class="btn btn-outline btn-sm" onclick="searchDiary()">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+          <button class="btn btn-primary" onclick="addDiary()">
+            <i class="fas fa-plus"></i> 添加日记
+          </button>
+        </div>
+
+        <!-- 月历视图 -->
+        <div class="calendar-container">
+          <div class="calendar-nav">
+            <button class="btn btn-sm btn-outline" onclick="prevMonth()">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <h3 id="currentMonth"></h3>
+            <button class="btn btn-sm btn-outline" onclick="nextMonth()">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+          <div class="calendar" id="calendar">
+            <!-- 动态生成日历 -->
+          </div>
+        </div>
+
+        <!-- 日记列表 -->
+        <div class="diary-list" id="diaryList">
+          <!-- 动态生成日记列表 -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 编辑档案模态框 -->
+  <div id="editProfileModal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>编辑档案</h3>
+        <button class="modal-close" onclick="closeEditProfileModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="profileForm">
+          <div class="form-group">
+            <label for="petName">名字 <span class="required">*</span></label>
+            <input type="text" id="petName" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="petBreed">品种 <span class="required">*</span></label>
+            <input type="text" id="petBreed" class="form-control" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="petGender">性别</label>
+              <select id="petGender" class="form-control">
+                <option value="male">公</option>
+                <option value="female">母</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="petBirthday">生日</label>
+              <input type="date" id="petBirthday" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="petColor">毛色</label>
+            <input type="text" id="petColor" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="petDescription">简介</label>
+            <textarea id="petDescription" class="form-control" rows="3"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeEditProfileModal()">取消</button>
+        <button class="btn btn-primary" onclick="saveProfile()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 添加体重记录模态框 -->
+  <div id="addWeightModal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>添加体重记录</h3>
+        <button class="modal-close" onclick="closeAddWeightModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="weightForm">
+          <div class="form-group">
+            <label for="weightDate">日期 <span class="required">*</span></label>
+            <input type="date" id="weightDate" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="weightValue">体重(kg) <span class="required">*</span></label>
+            <input type="number" id="weightValue" class="form-control" step="0.1" min="0" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeAddWeightModal()">取消</button>
+        <button class="btn btn-primary" onclick="saveWeightRecord()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 编辑性格标签模态框 -->
+  <div id="editTagsModal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>编辑性格标签</h3>
+        <button class="modal-close" onclick="closeEditTagsModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="tagsForm">
+          <div class="form-group">
+            <label>添加标签</label>
+            <div class="tag-input-group">
+              <input type="text" id="newTag" class="form-control" placeholder="输入标签后按回车">
+              <button type="button" class="btn btn-primary" onclick="addTag()">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>已有标签</label>
+            <div class="tags-list" id="tagsList">
+              <!-- 动态生成 -->
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeEditTagsModal()">取消</button>
+        <button class="btn btn-primary" onclick="saveTags()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 添加成长记录模态框 -->
+  <div id="addGrowthModal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="growthModalTitle">添加成长记录</h3>
+        <button class="modal-close" onclick="closeAddGrowthModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="growthForm">
+          <div class="form-group">
+            <label for="growthType">记录类型 <span class="required">*</span></label>
+            <select id="growthType" class="form-control" required>
+              <option value="milestone">里程碑事件</option>
+              <option value="weight">体重记录</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="growthDate">日期 <span class="required">*</span></label>
+            <input type="date" id="growthDate" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="growthTitle">标题 <span class="required">*</span></label>
+            <input type="text" id="growthTitle" class="form-control" required>
+          </div>
+          <div class="form-group" id="weightInputGroup" style="display: none;">
+            <label for="growthWeight">体重(kg)</label>
+            <input type="number" id="growthWeight" class="form-control" step="0.1" min="0">
+          </div>
+          <div class="form-group">
+            <label for="growthContent">详细描述</label>
+            <textarea id="growthContent" class="form-control" rows="4"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeAddGrowthModal()">取消</button>
+        <button class="btn btn-primary" onclick="saveGrowthRecord()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 添加照片模态框 -->
+  <div id="addPhotoModal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>添加照片</h3>
+        <button class="modal-close" onclick="closeAddPhotoModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="photoForm">
+          <div class="form-group">
+            <label for="photoDate">拍摄日期 <span class="required">*</span></label>
+            <input type="date" id="photoDate" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="photoCaption">照片描述</label>
+            <input type="text" id="photoCaption" class="form-control" placeholder="记录这一刻...">
+          </div>
+          <div class="form-group">
+            <label>照片预览</label>
+            <div class="photo-placeholder">
+              <i class="fas fa-image"></i>
+              <p>占位图片</p>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeAddPhotoModal()">取消</button>
+        <button class="btn btn-primary" onclick="savePhoto()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 添加日记模态框 -->
+  <div id="addDiaryModal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="diaryModalTitle">添加日记</h3>
+        <button class="modal-close" onclick="closeAddDiaryModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="diaryForm">
+          <div class="form-group">
+            <label for="diaryDate">日期 <span class="required">*</span></label>
+            <input type="date" id="diaryDate" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="diaryTitle">标题</label>
+            <input type="text" id="diaryTitle" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="diaryContent">内容 <span class="required">*</span></label>
+            <textarea id="diaryContent" class="form-control" rows="6" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="diaryTags">标签</label>
+            <input type="text" id="diaryTags" class="form-control" placeholder="用逗号分隔，如：开心,玩耍,吃饭">
+          </div>
+          <div class="form-group">
+            <label>照片</label>
+            <div class="photo-placeholder">
+              <i class="fas fa-image"></i>
+              <p>占位图片</p>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeAddDiaryModal()">取消</button>
+        <button class="btn btn-primary" onclick="saveDiary()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 隐藏的文件导入input -->
+  <input type="file" id="importFileInput" accept=".json" style="display: none;">
+
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <script src="../js/storage.js?v=1.1"></script>
+  <script src="../js/pages/pets.js?v=1.1"></script>
+</body>
+</html>

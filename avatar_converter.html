@@ -1,0 +1,194 @@
+？<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>头像转换工具</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+    .upload-area {
+      border: 2px dashed #ccc;
+      border-radius: 10px;
+      padding: 40px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .preview {
+      margin: 20px 0;
+      text-align: center;
+    }
+    .preview img {
+      max-width: 400px;
+      max-height: 400px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      font-family: monospace;
+      font-size: 12px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .btn {
+      background-color: #6366f1;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 5px;
+    }
+    .btn:hover {
+      background-color: #5558e3;
+    }
+    .info {
+      background-color: #f0f0f0;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>头像图片转 Base64 工具</h1>
+
+  <div class="upload-area">
+    <h3>选择图片文件</h3>
+    <input type="file" id="fileInput" accept="image/*">
+  </div>
+
+  <div class="preview" id="preview" style="display: none;">
+    <h3>预览图片</h3>
+    <img id="previewImg" alt="预览">
+  </div>
+
+  <div class="info" id="info" style="display: none;">
+    <h3>图片信息</h3>
+    <p>原始大小: <span id="originalSize"></span></p>
+    <p>压缩后大小: <span id="compressedSize"></span></p>
+    <p>Base64 长度: <span id="base64Length"></span></p>
+  </div>
+
+  <div id="output" style="display: none;">
+    <h3>Base64 代码</h3>
+    <p>复制以下代码并替换 profile.js 中第 7 行的 AVATAR_DATA 值:</p>
+    <textarea id="base64Output" readonly></textarea>
+    <br>
+    <button class="btn" onclick="copyToClipboard()">📋 复制到剪贴板</button>
+    <button class="btn" onclick="downloadCode()">💾 下载为文本文件</button>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const previewDiv = document.getElementById('preview');
+    const previewImg = document.getElementById('previewImg');
+    const infoDiv = document.getElementById('info');
+    const outputDiv = document.getElementById('output');
+    const base64Output = document.getElementById('base64Output');
+
+    fileInput.addEventListener('change', handleFileSelect);
+
+    function handleFileSelect(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      document.getElementById('originalSize').textContent = formatSize(file.size);
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+          // 压缩图片
+          compressImage(img, file.type);
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function compressImage(img, fileType) {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      // 设置最大尺寸为 400x400
+      let width = img.width;
+      let height = img.height;
+      const maxSize = 400;
+
+      if (width > height) {
+        if (width > maxSize) {
+          height *= maxSize / width;
+          width = maxSize;
+        }
+      } else {
+        if (height > maxSize) {
+          width *= maxSize / height;
+          height = maxSize;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+
+      // 绘制图片
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // 转换为 Base64 (JPEG 格式,质量 85%)
+      const base64Data = canvas.toDataURL('image/jpeg', 0.85);
+
+      // 显示预览
+      previewImg.src = base64Data;
+      previewDiv.style.display = 'block';
+
+      // 显示信息
+      const compressedSize = Math.round((base64Data.length * 3) / 4);
+      document.getElementById('compressedSize').textContent = formatSize(compressedSize);
+      document.getElementById('base64Length').textContent = base64Data.length.toLocaleString() + ' 字符';
+      infoDiv.style.display = 'block';
+
+      // 显示输出
+      base64Output.value = base64Data;
+      outputDiv.style.display = 'block';
+
+      // 如果大小超过 200KB,给出警告
+      if (compressedSize > 200 * 1024) {
+        alert('警告: 压缩后的图片仍然较大(' + formatSize(compressedSize) + '),可能会占用较多 localStorage 空间。');
+      }
+    }
+
+    function formatSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+    }
+
+    function copyToClipboard() {
+      base64Output.select();
+      document.execCommand('copy');
+      alert('✅ 已复制到剪贴板!');
+    }
+
+    function downloadCode() {
+      const blob = new Blob([base64Output.value], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'avatar_base64.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      alert('✅ 文件已下载!');
+    }
+  </script>
+</body>
+</html>

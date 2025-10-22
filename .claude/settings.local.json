@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__ide__getDiagnostics",
+      "Bash(python:*)",
+      "Bash(start msedge pages/album.html)",
+      "Bash(node:*)",
+      "Bash(start msedge pages/init-books-data.html)",
+      "Bash(start msedge \"D:\\AI编辑器VS Code\\开发\\复刻3\\个人成长网站\\pages\\init-books-data.html\")",
+      "Bash(dir:*)",
+      "Bash(start msedge \"D:\\AI编辑器VS Code\\开发\\复刻3\\个人成长网站\\pages\\books.html\")",
+      "Bash(start msedge \"D:\\AI编辑器VS Code\\开发\\复刻3\\个人成长网站\\pages\\hobby-add.html\")",
+      "Bash(start msedge \"D:\\AI编辑器VS Code\\开发\\复刻3\\个人成长网站\\pages\\hobbies.html\")",
+      "Bash(start msedge \"D:\\AI编辑器VS Code\\开发\\复刻3\\个人成长网站\\test-hobby-modal.html\")",
+      "Bash(del \"D:\\AI编辑器VS Code\\开发\\复刻3\\个人成长网站\\test-hobby-modal.html\")",
+      "Bash(start msedge \"D:\\AI编辑器VS Code\\开发\\复刻3\\个人成长网站\\pages\\pets.html\")",
+      "Bash(git init:*)",
+      "Bash(git config:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

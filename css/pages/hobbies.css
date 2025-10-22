@@ -1,0 +1,277 @@
+/* ========== 兴趣爱好列表页面样式 ========== */
+
+/* 顶部导航 */
+.hobbies-hero {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.hobbies-hero__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hobbies-hero__content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hobbies-hero__icon {
+  font-size: 2.5rem;
+}
+
+.hobbies-hero__title-group h1 {
+  font-size: 1.8rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+.hobbies-hero__title-group p {
+  margin: 0.25rem 0 0;
+  opacity: 0.9;
+  font-size: 0.95rem;
+}
+
+.hobbies-hero__actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+/* Hero 按钮 */
+.hero-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.hero-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.hero-btn--ghost {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.hero-btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* 主要内容 */
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* 统计信息 */
+.stats-section {
+  margin-bottom: 2rem;
+}
+
+.stats-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 2rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.stats-icon {
+  font-size: 2.5rem;
+  color: var(--secondary-color);
+}
+
+.stats-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stats-number {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.stats-label {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+/* 兴趣爱好网格 */
+.hobbies-section {
+  min-height: 400px;
+}
+
+.hobbies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* 兴趣爱好卡片 */
+.hobby-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.hobby-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-color);
+}
+
+.hobby-card__image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  background: var(--bg-tertiary);
+}
+
+.hobby-card__content {
+  padding: 1.25rem;
+}
+
+.hobby-card__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.hobby-card__desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.hobby-card__footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-tertiary);
+}
+
+.hobby-card__footer i {
+  font-size: 0.8rem;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-secondary);
+}
+
+.empty-state i {
+  font-size: 4rem;
+  color: var(--text-tertiary);
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.empty-state h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.empty-state p {
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+/* Toast 提示 */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--gray-800);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xl);
+  z-index: var(--z-notification);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.toast.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.toast.success {
+  background: var(--success-color);
+}
+
+.toast.error {
+  background: var(--danger-color);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .hobbies-hero__container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hobbies-hero__actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .hobbies-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-btn span {
+    display: none;
+  }
+
+  .hero-btn {
+    padding: 0.6rem;
+  }
+}

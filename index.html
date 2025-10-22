@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="个人成长网站 - 记录生活的每一刻">
+  <meta name="theme-color" content="#6366f1">
+  <title>个人成长网站</title>
+
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+  <!-- 首页容器 -->
+  <div class="homepage-wrapper">
+    <!-- 背景装饰 -->
+    <div class="background-decoration">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+    </div>
+
+    <!-- 主内容 -->
+    <div class="homepage-content">
+      <!-- 封面标题部分 -->
+      <header class="homepage-header">
+        <h1 class="homepage-title">个人成长网站</h1>
+        <p class="homepage-subtitle">记录生活，见证成长，分享故事</p>
+      </header>
+
+      <!-- 简介部分 -->
+      <section class="homepage-intro">
+        <div class="intro-text">
+          <p>这是一个纯前端的个人成长平台，用于记录你的旅行足迹、照片回忆、读书笔记、兴趣爱好和宠物故事。所有数据都存储在本地，完全属于你。</p>
+          <p>无需后端，无需部署，打开即用。点击下方按钮开始你的成长记录之旅。</p>
+        </div>
+
+        <!-- 功能预览 -->
+        <div class="features-preview">
+          <div class="feature-item">
+            <span class="feature-icon">🗺️</span>
+            <span class="feature-label">旅程</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">📸</span>
+            <span class="feature-label">相册</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">📚</span>
+            <span class="feature-label">读书</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">🎨</span>
+            <span class="feature-label">爱好</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">🐾</span>
+            <span class="feature-label">宠物</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 进入按钮 -->
+      <section class="homepage-cta">
+        <button class="btn btn-primary btn-lg enter-btn" onclick="enterWebsite()">
+          进入网站
+          <span class="btn-icon">→</span>
+        </button>
+        <p class="cta-hint">点击按钮开始使用</p>
+      </section>
+
+      <!-- 底部信息 -->
+      <footer class="homepage-footer">
+        <p>✨ 纯前端实现 • 本地数据存储 • 完全离线可用</p>
+      </footer>
+    </div>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/index.js"></script>
+</body>
+</html>

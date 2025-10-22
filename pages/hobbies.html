@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="兴趣爱好 - 个人成长网站">
+  <title>兴趣爱好 - 个人成长网站</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/pages/hobbies.css">
+</head>
+<body>
+  <!-- 顶部导航 -->
+  <nav class="hobbies-hero">
+    <div class="hobbies-hero__container">
+      <div class="hobbies-hero__content">
+        <div class="hobbies-hero__icon">🎨</div>
+        <div class="hobbies-hero__title-group">
+          <h1>我的兴趣爱好</h1>
+          <p>记录热爱与成长的每一刻</p>
+        </div>
+      </div>
+      <div class="hobbies-hero__actions">
+        <button class="hero-btn" id="addHobbyBtn" title="添加兴趣爱好">
+          <i class="fas fa-plus"></i>
+        </button>
+        <button class="hero-btn" id="exportHobbiesBtn" title="导出数据">
+          <i class="fas fa-download"></i>
+        </button>
+        <button class="hero-btn" id="importHobbiesBtn" title="导入数据">
+          <i class="fas fa-upload"></i>
+        </button>
+        <a href="../nav.html" class="hero-btn hero-btn--ghost" title="返回导航">
+          <i class="fas fa-arrow-left"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <main class="main-content">
+    <!-- 统计信息 -->
+    <section class="stats-section">
+      <div class="stats-card">
+        <i class="fas fa-heart stats-icon"></i>
+        <div class="stats-info">
+          <span class="stats-number" id="totalHobbies">0</span>
+          <span class="stats-label">个兴趣爱好</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 兴趣爱好网格 -->
+    <section class="hobbies-section">
+      <div id="hobbiesGrid" class="hobbies-grid" aria-live="polite"></div>
+      <div id="emptyState" class="empty-state" hidden>
+        <i class="fas fa-palette"></i>
+        <h3>还没有添加兴趣爱好</h3>
+        <p>点击右上角的"+"按钮开始记录你的兴趣爱好吧</p>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <input type="file" id="importFileInput" accept=".json" hidden>
+
+  <script src="../js/storage.js"></script>
+  <script src="../js/pages/hobbies.js"></script>
+</body>
+</html>

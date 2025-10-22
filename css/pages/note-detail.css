@@ -1,0 +1,408 @@
+/* ========== 笔记详情页面样式 ========== */
+
+/* 顶部导航 */
+.detail-hero {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.detail-hero__container {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.detail-hero__content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.detail-hero__icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+
+.detail-hero__title-group {
+  flex: 1;
+  min-width: 0;
+}
+
+.detail-hero__title-group h1 {
+  font-size: 1.6rem;
+  margin: 0;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.detail-hero__title-group p {
+  margin: 0.25rem 0 0;
+  opacity: 0.9;
+  font-size: 0.9rem;
+}
+
+.detail-hero__actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.hero-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.hero-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.hero-btn--ghost {
+  background: transparent;
+  border: 1px solid white;
+}
+
+.hero-btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* 主要内容 */
+.main-content {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+/* 笔记文章 */
+.note-article {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 3rem;
+}
+
+.note-meta {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #f5f5f5;
+  flex-wrap: wrap;
+}
+
+.note-time,
+.note-book {
+  color: #999;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.note-book {
+  color: #4facfe;
+  font-weight: 500;
+}
+
+.note-content {
+  color: #333;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.note-content p {
+  margin: 0 0 1.5rem;
+}
+
+.note-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* 弹窗样式 */
+.modal-backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-backdrop[aria-hidden="false"] {
+  display: flex;
+}
+
+.modal {
+  background: white;
+  border-radius: 16px;
+  max-width: 700px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #333;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #999;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-field--full {
+  width: 100%;
+}
+
+.form-field span {
+  font-size: 0.9rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.required {
+  color: #e74c3c;
+  margin-left: 0.25rem;
+}
+
+.form-field textarea {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.form-field textarea:focus {
+  outline: none;
+  border-color: #4facfe;
+  box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+}
+
+.form-hint {
+  color: #999;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+/* 按钮 */
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background: #4facfe;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #3d9ae8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+}
+
+.btn-outline {
+  background: white;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.btn-outline:hover {
+  background: #f5f5f5;
+}
+
+.btn-danger {
+  background: #e74c3c;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #c0392b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+/* 删除确认弹窗 */
+.delete-modal {
+  max-width: 400px;
+}
+
+/* Toast 提示 */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #333;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 2000;
+  max-width: 90%;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .detail-hero {
+    padding: 1.5rem 1rem;
+  }
+
+  .detail-hero__icon {
+    font-size: 2rem;
+  }
+
+  .detail-hero__title-group h1 {
+    font-size: 1.3rem;
+  }
+
+  .detail-hero__title-group p {
+    font-size: 0.85rem;
+  }
+
+  .hero-btn span {
+    display: none;
+  }
+
+  .hero-btn {
+    padding: 0.6rem;
+  }
+
+  .note-article {
+    padding: 2rem 1.5rem;
+  }
+
+  .note-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .note-content {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 0 1rem;
+  }
+
+  .detail-hero__content {
+    gap: 0.75rem;
+  }
+
+  .modal {
+    border-radius: 12px;
+  }
+
+  .note-article {
+    padding: 1.5rem 1rem;
+  }
+}

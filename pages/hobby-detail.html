@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="兴趣详情 - 个人成长网站">
+  <title>兴趣详情 - 个人成长网站</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/pages/hobby-detail.css">
+</head>
+<body>
+  <!-- 顶部导航 -->
+  <nav class="detail-hero">
+    <div class="detail-hero__container">
+      <div class="detail-hero__left">
+        <a href="hobbies.html" class="back-btn">
+          <i class="fas fa-arrow-left"></i>
+          <span>返回</span>
+        </a>
+        <h1 id="hobbyTitle">兴趣爱好</h1>
+      </div>
+      <div class="detail-hero__actions">
+        <button class="hero-btn" id="editBtn" title="编辑">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="hero-btn hero-btn--danger" id="deleteBtn" title="删除">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Tab 切换 -->
+  <div class="tabs-container">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="intro">
+        <i class="fas fa-info-circle"></i>
+        <span>详细介绍</span>
+      </button>
+      <button class="tab-btn" data-tab="works">
+        <i class="fas fa-images"></i>
+        <span>作品展示</span>
+      </button>
+      <button class="tab-btn" data-tab="timeline">
+        <i class="fas fa-stream"></i>
+        <span>成长时间轴</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 主要内容 -->
+  <main class="main-content">
+    <!-- Tab 1: 详细介绍 -->
+    <section id="introTab" class="tab-content active">
+      <div class="intro-section">
+        <div class="cover-image-wrapper">
+          <img id="coverImage" src="" alt="封面图片" class="cover-image">
+        </div>
+
+        <div class="info-card">
+          <div class="info-item">
+            <i class="fas fa-calendar-alt info-icon"></i>
+            <div class="info-text">
+              <span class="info-label">开始时间</span>
+              <span class="info-value" id="startDate">-</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-clock info-icon"></i>
+            <div class="info-text">
+              <span class="info-label">持续时间</span>
+              <span class="info-value" id="duration">-</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <h2>详细介绍</h2>
+          <div id="detailContent" class="detail-content">
+            <p class="empty-hint">暂无详细介绍</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 2: 作品展示 -->
+    <section id="worksTab" class="tab-content">
+      <div class="works-section">
+        <div class="section-header">
+          <h2>我的作品</h2>
+          <button class="btn btn-primary" id="addWorkBtn">
+            <i class="fas fa-plus"></i>
+            <span>添加作品</span>
+          </button>
+        </div>
+
+        <div id="worksGrid" class="works-grid"></div>
+        <div id="worksEmpty" class="empty-state" hidden>
+          <i class="fas fa-image"></i>
+          <h3>还没有添加作品</h3>
+          <p>点击"添加作品"按钮开始记录你的创作吧</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 3: 成长时间轴 -->
+    <section id="timelineTab" class="tab-content">
+      <div class="timeline-section">
+        <div class="section-header">
+          <h2>成长里程碑</h2>
+          <button class="btn btn-primary" id="addMilestoneBtn">
+            <i class="fas fa-plus"></i>
+            <span>添加里程碑</span>
+          </button>
+        </div>
+
+        <div id="timelineContainer" class="timeline-container"></div>
+        <div id="timelineEmpty" class="empty-state" hidden>
+          <i class="fas fa-route"></i>
+          <h3>还没有添加里程碑</h3>
+          <p>点击"添加里程碑"按钮记录重要的成长节点</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 删除确认弹窗 -->
+  <div id="deleteModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal delete-modal">
+      <div class="modal-header">
+        <h3>确认删除</h3>
+        <button class="modal-close" id="closeDeleteModal" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <p>确定要删除这个兴趣爱好吗？删除后将同时删除所有相关的作品和里程碑记录，此操作无法撤销。</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" type="button" id="cancelDelete">取消</button>
+        <button class="btn btn-danger" type="button" id="confirmDelete">
+          <i class="fas fa-trash"></i>
+          <span>确认删除</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="../js/storage.js"></script>
+  <script src="../js/pages/hobby-detail.js"></script>
+</body>
+</html>

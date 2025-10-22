@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="个人信息 - 我的成长档案">
+  <title>我的 - 个人成长网站</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/pages/profile.css">
+</head>
+<body>
+  <!-- 顶部导航栏 -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <!-- 返回按钮 -->
+      <a href="../nav.html" class="nav-btn back-btn">
+        <i class="fas fa-arrow-left"></i>
+        <span class="btn-text">返回</span>
+      </a>
+
+      <!-- 页面标题 -->
+      <h1 class="navbar-title">我的</h1>
+
+      <!-- 编辑按钮 -->
+      <button class="nav-btn edit-btn" id="editBtn" onclick="toggleEditMode()">
+        <i class="fas fa-edit"></i>
+        <span class="btn-text">编辑</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <main class="main-content">
+    <!-- 个人信息卡片 -->
+    <div class="profile-card">
+      <!-- 头像区域 -->
+      <div class="avatar-section">
+        <div class="avatar-wrapper">
+          <img src="" alt="头像" id="avatarImg" class="avatar">
+          <div class="avatar-overlay" id="avatarOverlay">
+            <i class="fas fa-camera"></i>
+            <span>更换头像</span>
+          </div>
+          <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+        </div>
+      </div>
+
+      <!-- 信息区域 -->
+      <div class="info-section">
+        <!-- 显示模式 -->
+        <div class="info-display" id="infoDisplay">
+          <div class="info-item">
+            <div class="info-label">
+              <i class="fas fa-user"></i>
+              <span>昵称</span>
+            </div>
+            <div class="info-value" id="displayName">浮生月下</div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">
+              <i class="fas fa-birthday-cake"></i>
+              <span>出生年月</span>
+            </div>
+            <div class="info-value" id="displayBirthDate">2003年5月7日</div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>所在城市</span>
+            </div>
+            <div class="info-value" id="displayCity">广州</div>
+          </div>
+
+          <div class="info-item signature-item">
+            <div class="info-label">
+              <i class="fas fa-quote-left"></i>
+              <span>个性签名</span>
+            </div>
+            <div class="info-value signature" id="displaySignature">明心悦性</div>
+          </div>
+        </div>
+
+        <!-- 编辑模式 -->
+        <div class="info-edit" id="infoEdit" style="display: none;">
+          <div class="form-group">
+            <label for="editName">
+              <i class="fas fa-user"></i>
+              昵称
+            </label>
+            <input type="text" id="editName" placeholder="请输入昵称" maxlength="20">
+          </div>
+
+          <div class="form-group">
+            <label for="editBirthDate">
+              <i class="fas fa-birthday-cake"></i>
+              出生年月
+            </label>
+            <input type="date" id="editBirthDate">
+          </div>
+
+          <div class="form-group">
+            <label for="editCity">
+              <i class="fas fa-map-marker-alt"></i>
+              所在城市
+            </label>
+            <input type="text" id="editCity" placeholder="请输入城市" maxlength="20">
+          </div>
+
+          <div class="form-group">
+            <label for="editSignature">
+              <i class="fas fa-quote-left"></i>
+              个性签名
+            </label>
+            <textarea id="editSignature" placeholder="写下你的个性签名..." maxlength="100" rows="3"></textarea>
+            <div class="char-count">
+              <span id="signatureCount">0</span>/100
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-outline" onclick="cancelEdit()">
+              <i class="fas fa-times"></i>
+              取消
+            </button>
+            <button class="btn btn-primary" onclick="saveProfile()">
+              <i class="fas fa-save"></i>
+              保存
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 统计信息 -->
+    <div class="stats-section">
+      <h2 class="section-title">我的足迹</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">🗺️</div>
+          <div class="stat-info">
+            <div class="stat-value" id="tripCount">0</div>
+            <div class="stat-label">旅程</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">📸</div>
+          <div class="stat-info">
+            <div class="stat-value" id="photoCount">0</div>
+            <div class="stat-label">照片</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">📚</div>
+          <div class="stat-info">
+            <div class="stat-value" id="bookCount">0</div>
+            <div class="stat-label">书籍</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">🎨</div>
+          <div class="stat-info">
+            <div class="stat-value" id="hobbyCount">0</div>
+            <div class="stat-label">爱好</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 提示信息 -->
+  <div id="toast" class="toast"></div>
+
+  <script src="../js/storage.js"></script>
+  <script src="../js/pages/profile.js"></script>
+</body>
+</html>

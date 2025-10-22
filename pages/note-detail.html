@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="笔记详情 - 个人成长网站">
+  <title>笔记详情 - 个人成长网站</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/pages/note-detail.css">
+</head>
+<body>
+  <!-- 顶部导航 -->
+  <nav class="detail-hero">
+    <div class="detail-hero__container">
+      <div class="detail-hero__content">
+        <div class="detail-hero__icon">📝</div>
+        <div class="detail-hero__title-group">
+          <h1 id="bookTitleNav">书籍标题</h1>
+          <p id="noteTimeNav">记录时间</p>
+        </div>
+      </div>
+      <div class="detail-hero__actions">
+        <button class="hero-btn" id="editNoteBtn" title="编辑笔记">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="hero-btn" id="deleteNoteBtn" title="删除笔记">
+          <i class="fas fa-trash"></i>
+        </button>
+        <button class="hero-btn hero-btn--ghost" id="backBtn" title="返回">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <main class="main-content">
+    <article class="note-article">
+      <div class="note-meta">
+        <span class="note-time" id="noteTime">
+          <i class="fas fa-clock"></i>
+          记录时间
+        </span>
+        <span class="note-book" id="noteBook">
+          <i class="fas fa-book"></i>
+          书籍名称
+        </span>
+      </div>
+
+      <div class="note-content" id="noteContent">
+        <!-- 笔记内容将在这里显示 -->
+      </div>
+    </article>
+  </main>
+
+  <!-- 编辑笔记弹窗 -->
+  <div id="editNoteModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal note-modal">
+      <div class="modal-header">
+        <h3>编辑笔记</h3>
+        <button class="modal-close" id="closeEditNoteModal" aria-label="关闭">×</button>
+      </div>
+      <form id="editNoteForm" class="modal-body" novalidate>
+        <label class="form-field form-field--full" for="editNoteContent">
+          <span>笔记内容<span class="required">*</span></span>
+          <textarea id="editNoteContent" rows="15" required placeholder="记录下你的阅读感悟、摘抄或思考..."></textarea>
+        </label>
+        <div class="form-hint">支持换行，修改时间将自动更新</div>
+      </form>
+      <div class="modal-footer">
+        <button class="btn btn-outline" type="button" id="cancelEditNote">取消</button>
+        <button class="btn btn-primary" type="submit" form="editNoteForm">
+          <i class="fas fa-save"></i>
+          <span>保存</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 删除确认弹窗 -->
+  <div id="deleteNoteModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal delete-modal">
+      <div class="modal-header">
+        <h3>确认删除</h3>
+        <button class="modal-close" id="closeDeleteNoteModal" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <p>确定要删除这条笔记吗？此操作无法撤销。</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" type="button" id="cancelDeleteNote">取消</button>
+        <button class="btn btn-danger" type="button" id="confirmDeleteNote">
+          <i class="fas fa-trash"></i>
+          <span>删除</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="../js/storage.js"></script>
+  <script src="../js/pages/note-detail.js"></script>
+</body>
+</html>

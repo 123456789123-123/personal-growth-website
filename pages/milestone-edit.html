@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="编辑里程碑 - 个人成长网站">
+  <title>编辑里程碑 - 个人成长网站</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/pages/milestone-form.css">
+</head>
+<body>
+  <!-- 顶部导航 -->
+  <nav class="form-hero">
+    <div class="form-hero__container">
+      <button class="back-btn" id="backBtn">
+        <i class="fas fa-arrow-left"></i>
+        <span>返回</span>
+      </button>
+      <h1>编辑里程碑</h1>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <main class="main-content">
+    <div class="form-container">
+      <form id="milestoneForm" class="milestone-form">
+        <!-- 时间点 -->
+        <div class="form-group">
+          <label for="milestoneDate" class="form-label required">时间点</label>
+          <input
+            type="date"
+            id="milestoneDate"
+            name="date"
+            class="form-input"
+            required
+          >
+        </div>
+
+        <!-- 标题 -->
+        <div class="form-group">
+          <label for="milestoneTitle" class="form-label required">标题</label>
+          <input
+            type="text"
+            id="milestoneTitle"
+            name="title"
+            class="form-input"
+            placeholder="例如：购买第一台相机、完成第一幅作品..."
+            required
+          >
+        </div>
+
+        <!-- 描述 -->
+        <div class="form-group">
+          <label for="description" class="form-label">描述</label>
+          <textarea
+            id="description"
+            name="description"
+            class="form-textarea"
+            rows="6"
+            placeholder="详细描述这个重要时刻..."
+          ></textarea>
+          <div class="form-hint">选填</div>
+        </div>
+
+        <!-- 表单按钮 -->
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline btn-lg" id="cancelBtn">
+            取消
+          </button>
+          <button type="submit" class="btn btn-primary btn-lg">
+            <i class="fas fa-save"></i>
+            <span>保存修改</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="../js/storage.js"></script>
+  <script src="../js/pages/milestone-edit.js"></script>
+</body>
+</html>

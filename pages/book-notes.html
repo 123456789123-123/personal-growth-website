@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="读书笔记 - 个人成长网站">
+  <title>读书笔记 - 个人成长网站</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/pages/book-notes.css">
+</head>
+<body>
+  <!-- 顶部导航 -->
+  <nav class="notes-hero">
+    <div class="notes-hero__container">
+      <div class="notes-hero__content">
+        <div class="notes-hero__icon">📖</div>
+        <div class="notes-hero__title-group">
+          <h1 id="bookTitle">书籍标题</h1>
+          <p id="bookMeta">作者 · 评分</p>
+        </div>
+      </div>
+      <div class="notes-hero__actions">
+        <button class="hero-btn" id="editBookBtn" title="编辑书籍">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="hero-btn" id="deleteBookBtn" title="删除书籍">
+          <i class="fas fa-trash"></i>
+        </button>
+        <a href="books.html" class="hero-btn hero-btn--ghost" title="返回书单">
+          <i class="fas fa-arrow-left"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <main class="main-content">
+    <!-- 书籍信息卡片 -->
+    <section class="book-info-card">
+      <div class="book-cover" id="bookCover">
+        <img src="" alt="书籍封面">
+      </div>
+      <div class="book-details">
+        <h2 id="bookNameDisplay">书名</h2>
+        <div class="book-meta">
+          <span id="authorDisplay">作者</span>
+          <span class="divider">|</span>
+          <span id="ratingDisplay">评分</span>
+          <span class="divider">|</span>
+          <span id="statusDisplay">状态</span>
+        </div>
+        <div class="book-dates">
+          <span id="dateDisplay">阅读时间</span>
+        </div>
+        <div class="book-stats">
+          <span id="notesCount">0 条笔记</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 笔记列表 -->
+    <section class="notes-section">
+      <!-- 添加笔记输入区 -->
+      <div class="add-note-section">
+        <h2>读书笔记</h2>
+        <div class="add-note-form">
+          <textarea id="newNoteInput" rows="4" placeholder="在此输入新笔记，支持回车换行。输入完成后点击添加按钮或按 Ctrl+Enter 快速添加..."></textarea>
+          <button class="btn btn-primary" id="addNoteBtn">
+            <i class="fas fa-plus"></i>
+            <span>添加笔记</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 笔记列表 -->
+      <div id="notesList" class="notes-list"></div>
+
+      <div id="emptyState" class="empty-state" hidden>
+        <i class="fas fa-pen"></i>
+        <h3>还没有添加笔记</h3>
+        <p>在上方输入框中记录你的第一条阅读感悟吧</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- 删除笔记确认弹窗 -->
+  <div id="deleteNoteModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal delete-modal">
+      <div class="modal-header">
+        <h3>确认删除</h3>
+        <button class="modal-close" id="closeDeleteNoteModal" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <p>确定要删除这条笔记吗？此操作无法撤销。</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" type="button" id="cancelDeleteNote">取消</button>
+        <button class="btn btn-danger" type="button" id="confirmDeleteNote">
+          <i class="fas fa-trash"></i>
+          <span>删除</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="../js/storage.js"></script>
+  <script src="../js/pages/book-notes.js"></script>
+</body>
+</html>
