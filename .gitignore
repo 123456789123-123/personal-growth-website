@@ -58,3 +58,6 @@ yarn.lock
 # 测试文件
 test/
 *.test.js
+
+# 个人图片文件
+绘制美女图片.png
